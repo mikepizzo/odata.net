@@ -31,6 +31,12 @@ namespace Microsoft.OData.Edm.Tests.Vocabularies
   <TypeDefinition Name=""Tag"" UnderlyingType=""Edm.Boolean"">
     <Annotation Term=""Core.Description"" String=""This is the type to use for all tagging terms"" />
   </TypeDefinition>
+  <ComplexType Name=""OptionalParameterType"">
+    <Property Name=""IsOptional"" Type=""Edm.Boolean"" DefaultValue=""true"" />
+    <Property Name=""DefaultValue"" Type=""Edm.String"">
+      <Annotation Term=""Core.Description"" String=""Default value for an optional parameter, using the same rules for the default value facet of a property."" />
+    </Property>
+  </ComplexType>
   <EnumType Name=""Permission"" IsFlags=""true"">
     <Member Name=""None"" Value=""0"" />
     <Member Name=""Read"" Value=""1"" />
@@ -89,6 +95,9 @@ namespace Microsoft.OData.Edm.Tests.Vocabularies
   <Term Name=""OptimisticConcurrency"" Type=""Collection(Edm.PropertyPath)"" AppliesTo=""EntitySet"">
     <Annotation Term=""Core.Description"" String=""Data modification requires the use of Etags. A non-empty collection contains the set of properties that are used to compute the ETag"" />
   </Term>
+  <Term Name=""OptionalParameter"" Type=""Core.OptionalParameterType"" AppliesTo=""Parameter"">
+    <Annotation Term=""Core.Description"" String=""Supplying a value for the parameter is optional."" />
+  </Term>
 </Schema>";
 
             var s = coreVocModel.FindDeclaredTerm("Org.OData.Core.V1.OptimisticConcurrency");
@@ -127,7 +136,11 @@ namespace Microsoft.OData.Edm.Tests.Vocabularies
             XmlWriter xw = XmlWriter.Create(sw, settings);
             coreVocModel.TryWriteSchema(xw, out errors);
             xw.Flush();
+#if NETCOREAPP1_0
+            xw.Dispose();
+#else
             xw.Close();
+#endif
             string output = sw.ToString();
             Assert.False(errors.Any(), "No Errors");
             Assert.Equal(expectedText, output);

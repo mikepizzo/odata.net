@@ -15,6 +15,8 @@
     <DocumentationFile>$(AssemblyName).xml</DocumentationFile>
     <ProjectGuid>{DB301FA8-1CFA-487D-BA1E-803016E2A85C}</ProjectGuid>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <UseDefaultVisualStudioVersion>false</UseDefaultVisualStudioVersion>
+    <VisualStudioVersion>14.0</VisualStudioVersion>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <DefineConstants>$(DefineConstants);PORTABLELIB;SUPPRESS_PORTABLELIB_TARGETFRAMEWORK_ATTRIBUTE</DefineConstants>
     <HasIntellisenseFile>true</HasIntellisenseFile>
@@ -498,6 +500,9 @@
     <Compile Include="..\Csdl\Semantics\CsdlSemanticsOperationParameter.cs">
       <Link>Csdl\Semantics\CsdlSemanticsOperationParameter.cs</Link>
     </Compile>
+    <Compile Include="..\Csdl\Semantics\CsdlSemanticsOptionalParameter.cs">
+      <Link>Csdl\Semantics\CsdlSemanticsOptionalParameter.cs</Link>
+    </Compile>
     <Compile Include="..\Csdl\Semantics\CsdlSemanticsPathExpression.cs">
       <Link>Csdl\Semantics\CsdlSemanticsPathExpression.cs</Link>
     </Compile>
@@ -856,6 +861,9 @@
     <Compile Include="..\Schema\EdmOperationParameter.cs">
       <Link>Schema\EdmOperationParameter.cs</Link>
     </Compile>
+    <Compile Include="..\Schema\EdmOptionalParameter.cs">
+      <Link>Schema\EdmOptionalParameter.cs</Link>
+    </Compile>
     <Compile Include="..\Schema\EdmPathExpression.cs">
       <Link>Schema\EdmPathExpression.cs</Link>
     </Compile>
@@ -1033,6 +1041,9 @@
     </Compile>
     <Compile Include="..\Schema\Interfaces\IEdmOperationParameter.cs">
       <Link>Schema\Interfaces\IEdmOperationParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\Schema\Interfaces\IEdmOptionalParameter.cs">
+      <Link>Schema\Interfaces\IEdmOptionalParameter.cs</Link>
     </Compile>
     <Compile Include="..\Schema\Interfaces\IEdmPathExpression.cs">
       <Link>Schema\Interfaces\IEdmPathExpression.cs</Link>
@@ -1486,17 +1497,16 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="..\Vocabularies\AlternateKeysVocabularies.xml">
+    <EmbeddedResource Include="..\Vocabularies\AlternateKeysVocabularies.xml">
       <Link>Vocabularies\AlternateKeysVocabularies.xml</Link>
-    </Content>
-    <Content Include="..\Vocabularies\CapabilitiesVocabularies.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Vocabularies\CapabilitiesVocabularies.xml">
       <Link>Vocabularies\CapabilitiesVocabularies.xml</Link>
-    </Content>
-    <Content Include="..\Vocabularies\CoreVocabularies.xml">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Vocabularies\CoreVocabularies.xml">
       <Link>Vocabularies\CoreVocabularies.xml</Link>
-    </Content>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(BuildExtensionsPath)\Portable.targets" />
 </Project>
