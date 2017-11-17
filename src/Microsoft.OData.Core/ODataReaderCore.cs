@@ -11,12 +11,14 @@ namespace Microsoft.OData
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
+    using System.IO;
     using System.Linq;
 #if PORTABLELIB
     using System.Threading.Tasks;
 #endif
     using Microsoft.OData.Edm;
     using Microsoft.OData.Metadata;
+
     #endregion Namespaces
 
     /// <summary>
@@ -361,6 +363,25 @@ namespace Microsoft.OData
 #endif
 
         /// <summary>
+        /// Creates a stream for reading an inline stream property.
+        /// </summary>
+        /// <returns>A stream for reading the stream property.</returns>
+        public override sealed Stream CreateReadStream()
+        {
+            if (this.State == ODataReaderState.Stream)
+            {
+                // todo (mikep): if we decide we need async version, implement
+                // and call this.VerifyCanReadStream(true);
+                return this.InterceptException(this.CreateReadStreamImplementation);
+            }
+            else
+            {
+                // todo (mikep): create a proper error for this
+                throw new Exception("CreateReadStream can only be called while in ODataReaderState.Stream");
+            }
+        }
+
+        /// <summary>
         /// Seek scope in the stack which is type of <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The type of scope to seek.</typeparam>
@@ -423,6 +444,24 @@ namespace Microsoft.OData
         /// </summary>
         /// <returns>true if more items can be read from the reader; otherwise false.</returns>
         protected virtual bool ReadAtPrimitiveImplementation()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Implementation of the reader logic when in state 'Stream'.
+        /// </summary>
+        /// <returns>true if more items can be read from the reader; otherwise false.</returns>
+        protected virtual bool ReadAtStreamImplementation()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Creates a Stream for reading a stream property when in state 'Stream'.
+        /// </summary>
+        /// <returns>A stream for reading the stream property.</returns>
+        protected virtual Stream CreateReadStreamImplementation()
         {
             throw new NotImplementedException();
         }
@@ -699,6 +738,10 @@ namespace Microsoft.OData
                     result = this.ReadAtPrimitiveImplementation();
                     break;
 
+                case ODataReaderState.Stream:
+                    result = this.ReadAtStreamImplementation();
+                    break;
+
                 case ODataReaderState.NestedResourceInfoStart:
                     result = this.ReadAtNestedResourceInfoStartImplementation();
                     break;
@@ -858,6 +901,7 @@ namespace Microsoft.OData
                     state == ODataReaderState.ResourceStart && (item == null || item is ODataResource) ||
                     state == ODataReaderState.ResourceEnd && (item is ODataResource || item == null) ||
                     state == ODataReaderState.Primitive && (item == null || item is ODataPrimitiveValue) ||
+                    state == ODataReaderState.Stream && item is ODataStreamReferenceValue ||
                     state == ODataReaderState.ResourceSetStart && item is ODataResourceSet ||
                     state == ODataReaderState.ResourceSetEnd && item is ODataResourceSet ||
                     state == ODataReaderState.NestedResourceInfoStart && item is ODataNestedResourceInfo ||

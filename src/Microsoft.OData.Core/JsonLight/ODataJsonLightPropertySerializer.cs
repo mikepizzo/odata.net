@@ -130,39 +130,6 @@ namespace Microsoft.OData.JsonLight
         }
 
         /// <summary>
-        /// Test to see if <paramref name="property"/> is an open property or not.
-        /// </summary>
-        /// <param name="property">The property in question.</param>
-        /// <returns>true if the property is an open property; false if it is not, or if openness cannot be determined</returns>
-        private bool IsOpenProperty(ODataProperty property)
-        {
-            Debug.Assert(property != null, "property != null");
-
-            bool isOpenProperty;
-
-            if (property.SerializationInfo != null)
-            {
-                isOpenProperty = property.SerializationInfo.PropertyKind == ODataPropertyKind.Open;
-            }
-            else
-            {
-                // TODO: (issue #888) this logic results in type annotations not being written for dynamic properties on types that are not
-                // marked as open. Type annotations should always be written for dynamic properties whose type cannot be hueristically
-                // determined. Need to change this.currentPropertyInfo.MetadataType.IsOpenProperty to this.currentPropertyInfo.MetadataType.IsDynamic,
-                // and fix related tests and other logic (this change alone results in writing type even if it's already implied by context).
-                isOpenProperty = (!this.WritingResponse && this.currentPropertyInfo.MetadataType.OwningType == null) // Treat property as dynamic property when writing request and owning type is null
-                || this.currentPropertyInfo.MetadataType.IsOpenProperty;
-            }
-
-            if (isOpenProperty)
-            {
-                this.WriterValidator.ValidateOpenPropertyValue(property.Name, property.ODataValue);
-            }
-
-            return isOpenProperty;
-        }
-
-        /// <summary>
         /// Writes a name/value pair for a property.
         /// </summary>
         /// <param name="property">The property to write out.</param>
@@ -172,7 +139,7 @@ namespace Microsoft.OData.JsonLight
         /// Named stream properties should only be defined on ODataResource instances.</param>
         /// <param name="duplicatePropertyNameChecker">The DuplicatePropertyNameChecker to use.</param>
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Splitting the code would make the logic harder to understand; class coupling is only slightly above threshold.")]
-        private void WriteProperty(
+        internal void WriteProperty(
             ODataProperty property,
             IEdmStructuredType owningType,
             bool isTopLevel,
@@ -257,6 +224,39 @@ namespace Microsoft.OData.JsonLight
                 this.WriteCollectionProperty(collectionValue, isOpenPropertyType);
                 return;
             }
+        }
+
+        /// <summary>
+        /// Test to see if <paramref name="property"/> is an open property or not.
+        /// </summary>
+        /// <param name="property">The property in question.</param>
+        /// <returns>true if the property is an open property; false if it is not, or if openness cannot be determined</returns>
+        private bool IsOpenProperty(ODataProperty property)
+        {
+            Debug.Assert(property != null, "property != null");
+
+            bool isOpenProperty;
+
+            if (property.SerializationInfo != null)
+            {
+                isOpenProperty = property.SerializationInfo.PropertyKind == ODataPropertyKind.Open;
+            }
+            else
+            {
+                // TODO: (issue #888) this logic results in type annotations not being written for dynamic properties on types that are not
+                // marked as open. Type annotations should always be written for dynamic properties whose type cannot be hueristically
+                // determined. Need to change this.currentPropertyInfo.MetadataType.IsOpenProperty to this.currentPropertyInfo.MetadataType.IsDynamic,
+                // and fix related tests and other logic (this change alone results in writing type even if it's already implied by context).
+                isOpenProperty = (!this.WritingResponse && this.currentPropertyInfo.MetadataType.OwningType == null) // Treat property as dynamic property when writing request and owning type is null
+                || this.currentPropertyInfo.MetadataType.IsOpenProperty;
+            }
+
+            if (isOpenProperty)
+            {
+                this.WriterValidator.ValidateOpenPropertyValue(property.Name, property.ODataValue);
+            }
+
+            return isOpenProperty;
         }
 
         private void WriteUntypedValue(ODataUntypedValue untypedValue)

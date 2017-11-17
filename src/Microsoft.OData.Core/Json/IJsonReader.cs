@@ -4,8 +4,23 @@
 // </copyright>
 //---------------------------------------------------------------------
 
+
 namespace Microsoft.OData.Json
 {
+    using System.IO;
+
+    /// <summary>
+    /// Interface for a class that can read arbitrary JSON and stream binary properties.
+    /// </summary>
+    public interface IJsonStreamReader : IJsonReader
+    {
+        /// <summary>
+        /// Creates a stream for reading a base64 URL encoded binary value.
+        /// </summary>
+        /// <returns>A stream for reading a base64 URL encoded binary value.</returns>
+        Stream CreateReadStream();
+    }
+
     /// <summary>
     /// Interface for a class that can read arbitrary JSON.
     /// </summary>

@@ -6,6 +6,7 @@
 
 namespace Microsoft.OData.Json
 {
+    using System;
     #region Namespaces
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -17,7 +18,7 @@ namespace Microsoft.OData.Json
     /// <summary>
     /// Reader for the JSON format (http://www.json.org) that supports look-ahead.
     /// </summary>
-    internal class BufferingJsonReader : IJsonReader
+    internal class BufferingJsonReader : IJsonStreamReader
     {
         /// <summary>The (possibly empty) list of buffered nodes.</summary>
         /// <remarks>This is a circular linked list where this field points to the first item of the list.</remarks>
@@ -141,6 +142,24 @@ namespace Microsoft.OData.Json
             {
                 return this.innerReader.IsIeee754Compatible;
             }
+        }
+
+        public Stream CreateReadStream()
+        {
+            if (this.NodeType != JsonNodeType.Property)
+            {
+                throw new Exception("must only call readstream when positioned on a property");
+            }
+
+            IJsonStreamReader streamReader = this.innerReader as IJsonStreamReader;
+            if (!this.isBuffering && streamReader != null)
+            {
+                return streamReader.CreateReadStream();
+            }
+
+            this.innerReader.Read();
+            return new MemoryStream(Convert.FromBase64String(((string)this.Value).Replace('_', '/').Replace('-', '+')));
+
         }
 
         /// <summary>
@@ -970,6 +989,7 @@ namespace Microsoft.OData.Json
 
             return false;
         }
+
 #endif
         /// <summary>
         /// Private class used to buffer nodes when reading in buffering mode.

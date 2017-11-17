@@ -8,6 +8,7 @@ namespace Microsoft.OData
 {
     #region Namespaces
     using System;
+    using System.IO;
     using Microsoft.OData.Evaluation;
 
     #endregion
@@ -15,7 +16,7 @@ namespace Microsoft.OData
     /// <summary>
     /// Represents a media resource.
     /// </summary>
-    public sealed class ODataStreamReferenceValue : ODataValue
+    public class ODataStreamReferenceValue : ODataValue
     {
         /// <summary>the metadata builder for this OData resource.</summary>
         private ODataResourceMetadataBuilder metadataBuilder;
