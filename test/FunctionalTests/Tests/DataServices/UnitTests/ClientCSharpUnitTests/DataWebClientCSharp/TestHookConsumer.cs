@@ -10,14 +10,13 @@ namespace AstoriaUnitTests.Tests
 
     using System;
     using System.Collections.Generic;
-    using Microsoft.OData.Client;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq.Expressions;
     using System.Net;
-    using System.Reflection;
+    using System.Net.Http.Headers;
     using System.Xml.Linq;
     using Microsoft.OData;
+    using Microsoft.OData.Client;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     #endregion
@@ -98,14 +97,17 @@ namespace AstoriaUnitTests.Tests
         private void SendRequest(HttpWebRequestMessage requestMessage)
         {
             Assert.IsNotNull(requestMessage, "sendRequest test hook was called with null request message");
-            Dictionary<string, string> headers = WrapHttpHeaders(requestMessage.HttpWebRequest.Headers);
-            headers.Add("__Uri", requestMessage.HttpWebRequest.RequestUri.AbsoluteUri);
-            headers.Add("__HttpVerb", requestMessage.HttpWebRequest.Method);
+            Dictionary<string, string> headers = WrapHttpRequestHeaders(requestMessage.HttpRequestMessage.Headers);
+            headers.Add("__Uri", requestMessage.Url.AbsoluteUri);
+            headers.Add("__HttpVerb", requestMessage.HttpRequestMessage.Method.ToString());
             requestHeaders.Add(headers);
+
+            requestMessage.SetHeader("__Uri", requestMessage.Url.AbsoluteUri);
+            requestMessage.SetHeader("__HttpVerb", requestMessage.Method);
 
             if (null != this.CustomSendRequestAction)
             {
-                this.CustomSendRequestAction(requestMessage.HttpWebRequest);
+                this.CustomSendRequestAction(requestMessage.HttpRequestMessage);
             }
         }
 
@@ -128,6 +130,19 @@ namespace AstoriaUnitTests.Tests
             foreach (string name in headerCollection.AllKeys)
             {
                 headers.Add(name, headerCollection[name]);
+            }
+
+            return headers;
+        }
+
+        private Dictionary<string, string> WrapHttpRequestHeaders(HttpRequestHeaders headerCollection)
+        {
+            var headers = new Dictionary<string, string>();
+            foreach (var name in headerCollection)
+            {
+                string headerName = name.Key;
+                string headerValue = name.Value.ToString();
+                headers.Add(headerName, headerValue);
             }
 
             return headers;
@@ -194,7 +209,7 @@ namespace AstoriaUnitTests.Tests
             TestHttpWebResponseMessage responseMessage;
             try
             {
-                var httpResponse = (HttpWebResponse)this.HttpWebRequest.GetResponse();
+                var httpResponse = (HttpWebResponse)this.GetResponse();
                 responseMessage = new TestHttpWebResponseMessage(httpResponse, this.WrapResponseStream);
                 this.SendResponse(responseMessage);
                 return responseMessage;
@@ -223,7 +238,7 @@ namespace AstoriaUnitTests.Tests
             TestHttpWebResponseMessage responseMessage;
             try
             {
-                var httpResponse = (HttpWebResponse)this.HttpWebRequest.EndGetResponse(asyncResult);
+                var httpResponse = (HttpWebResponse)this.EndGetResponse(asyncResult);
                 responseMessage = new TestHttpWebResponseMessage(httpResponse, this.WrapResponseStream);
                 this.SendResponse(responseMessage);
                 return responseMessage;

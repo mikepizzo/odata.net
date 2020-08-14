@@ -440,7 +440,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
                 public override Stream GetStream()
                 {
                     ExceptionUtilities.Assert(!this.requestHeadersSent, "requestHeaders must not be set yet");
-                    this.InternalSendRequest(this.HttpWebRequest);
+                    this.InternalSendRequest(this.HttpRequestMessage);
                     this.requestHeadersSent = true;
                     var stream = base.GetStream();
                     return this.InternalGetRequestWrappingStream(stream);
@@ -449,7 +449,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
                 public override IAsyncResult BeginGetRequestStream(AsyncCallback callback, object state)
                 {
                     ExceptionUtilities.Assert(!this.requestHeadersSent, "requestHeaders must not be set yet");
-                    this.InternalSendRequest(this.HttpWebRequest);
+                    this.InternalSendRequest(this.HttpRequestMessage);
                     this.requestHeadersSent = true;
 
                     return base.BeginGetRequestStream(callback, state);
@@ -465,7 +465,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
                 {
                     if (!this.requestHeadersSent)
                     {
-                        this.InternalSendRequest(this.HttpWebRequest);
+                        this.InternalSendRequest(this.HttpRequestMessage);
                         this.requestHeadersSent = true;
                     }
 
@@ -490,7 +490,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
                 {
                     if (!this.requestHeadersSent)
                     {
-                        this.InternalSendRequest(this.HttpWebRequest);
+                        this.InternalSendRequest(this.HttpRequestMessage);
                         this.requestHeadersSent = true;
                     }
 

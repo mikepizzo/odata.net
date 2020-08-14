@@ -13,7 +13,7 @@ namespace Microsoft.OData.Client.TDDUnitTests.Tests
     using System.Threading.Tasks;
     using Microsoft.OData;
     using Microsoft.OData.Client;
-   
+
 
     public class CustomizedHttpWebRequestMessage : HttpWebRequestMessage
     {

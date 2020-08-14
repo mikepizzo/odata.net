@@ -11,6 +11,7 @@ namespace AstoriaUnitTests.TDD.Tests.Client
     using FluentAssertions;
     using Microsoft.OData.Edm;
     using Xunit;
+    using System.Net.Http;
 
     /// <summary>
     /// TODO: test the rest of RequestInfo
@@ -117,9 +118,9 @@ namespace AstoriaUnitTests.TDD.Tests.Client
 
             requestMessage.GetHeader(XmlConstants.HttpXMethod).Should().Be("DELETE");
             requestMessage.GetHeader(XmlConstants.HttpContentLength).Should().Be("0");
-            requestMessage.GetHeader(XmlConstants.HttpContentType).Should().BeNull();
+            requestMessage.GetHeader(XmlConstants.HttpContentType).Should().BeEmpty();
             requestMessage.Method.Should().Be("DELETE");
-            requestMessage.HttpWebRequest.Method.Should().Be("POST");
+            requestMessage.HttpRequestMessage.Method.Should().Be(HttpMethod.Post);
             
             // undoing change so this is applicable only for this test.
             ctx.UsePostTunneling = previousPostTunnelingValue;
@@ -138,7 +139,7 @@ namespace AstoriaUnitTests.TDD.Tests.Client
 
             requestMessage.GetHeader(XmlConstants.HttpXMethod).Should().Be("PATCH");
             requestMessage.Method.Should().Be("PATCH");
-            requestMessage.HttpWebRequest.Method.Should().Be("POST");
+            requestMessage.HttpRequestMessage.Method.Should().Be(HttpMethod.Post);
 
             // undoing change so this is applicable only for this test.
             ctx.UsePostTunneling = previousPostTunnelingValue;

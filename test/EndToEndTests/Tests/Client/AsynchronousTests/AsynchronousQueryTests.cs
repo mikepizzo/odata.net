@@ -185,7 +185,6 @@ namespace Microsoft.Test.OData.Tests.Client.AsynchronousTests
                 Assert.Equal("MyNamespace.CustomAnnotation1", value);
                 value = "";
             }
-
             this.EnqueueTestComplete();
         }
 
@@ -308,7 +307,7 @@ namespace Microsoft.Test.OData.Tests.Client.AsynchronousTests
             {
                 if (args.RequestMessage is HttpWebRequestMessage)
                 {
-                    servicePoint = ((HttpWebRequestMessage)args.RequestMessage).HttpWebRequest.ServicePoint;
+                   
                 }
             });
 

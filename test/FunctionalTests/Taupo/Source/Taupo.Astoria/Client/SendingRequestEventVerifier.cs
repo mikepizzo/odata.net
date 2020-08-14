@@ -11,6 +11,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
     using System.Globalization;
     using System.Linq;
     using System.Net;
+    using System.Net.Http;
     using System.Text;
 #if !WINDOWS_PHONE
 
@@ -232,8 +233,8 @@ namespace Microsoft.Test.Taupo.Astoria.Client
 
                         this.assert.IsNotNull(requestMessage, "RequestMessage should be of type HttpWebRequestMessage");
 
-                        var httpWebRequest = requestMessage.HttpWebRequest as HttpWebRequest;
-                        this.assert.IsNotNull(httpWebRequest, "RequestMessage.HttpWebRequest should be of type HttpWebRequest");
+                        var httpRequestMessage = requestMessage.HttpRequestMessage as HttpRequestMessage;
+                        this.assert.IsNotNull(httpRequestMessage, "RequestMessage.HttpWebRequest should be of type HttpWebRequest");
 
 #if WIN8
                     if (this.expectedContext.Credentials != null)
@@ -241,18 +242,18 @@ namespace Microsoft.Test.Taupo.Astoria.Client
                         this.assert.AreSame(this.expectedContext.Credentials, httpWebRequest.Credentials, "Request credentials were not set");
                     }
 #else
-                        this.assert.AreSame(this.expectedContext.Credentials, httpWebRequest.Credentials, "Request credentials were not set");
+                        this.assert.AreSame(this.expectedContext.Credentials, requestMessage.Credentials, "Request credentials were not set");
 #endif
 
                         this.assert.IsNull(this.uriFromEvent, "Last uri unexpectedly not null. Test hook did not fire");
-                        this.assert.AreEqual(requestMessage.Url, httpWebRequest.RequestUri, "Request Uri does not match RequestUri from HttpWebRequest");
-                        this.uriFromEvent = httpWebRequest.RequestUri;
+                        this.assert.AreEqual(requestMessage.Url, httpRequestMessage.RequestUri, "Request Uri does not match RequestUri from HttpWebRequest");
+                        this.uriFromEvent = httpRequestMessage.RequestUri;
 
                         this.assert.IsNull(this.methodFromEvent, "Last method unexpectedly not null. Test hook did not fire");
-                        this.methodFromEvent = httpWebRequest.Method;
+                        this.methodFromEvent = httpRequestMessage.Method.ToString();
 
                         this.assert.IsNull(this.originalHeadersFromEvent, "Last headers unexpectedly not null. Test hook did not fire");
-                        this.assert.AreEqual(requestMessage.Headers.Count(), httpWebRequest.Headers.Count, "Request Headers count does not match Headers count from HttpWebRequest");
+                        this.assert.AreEqual(requestMessage.Headers.Count(), httpRequestMessage.Headers, "Request Headers count does not match Headers count from HttpWebRequest");
 
                         this.originalHeadersFromEvent = requestMessage.Headers.ToDictionary(k => k.Key, v => v.Value);
                         this.expectedHeaders = new Dictionary<string, string>(this.originalHeadersFromEvent);

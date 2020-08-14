@@ -73,7 +73,7 @@ namespace AstoriaUnitTests.TDD.Tests.Client
         [Fact]
         public void RequestMessageShouldBeCaseInsensitiveForAccept()
         {
-            TestRequestHeaderRoundTrip("accept", "ACCEPT", "some value");
+            TestRequestHeaderRoundTrip("accept", "ACCEPT", "some/value");
         }
 
         [Fact]

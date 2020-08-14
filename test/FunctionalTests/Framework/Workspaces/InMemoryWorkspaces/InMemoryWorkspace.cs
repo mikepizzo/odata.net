@@ -347,7 +347,7 @@ namespace System.Data.Test.Astoria
                 _workaroundDateTimeQuery = null;
             }
             HttpWebRequestMessage webRequestMessage = new HttpWebRequestMessage(args);
-            webRequestMessage.HttpWebRequest.UseDefaultCredentials = true;
+            webRequestMessage.Credentials = CredentialCache.DefaultCredentials;
             return webRequestMessage;
         }
 
