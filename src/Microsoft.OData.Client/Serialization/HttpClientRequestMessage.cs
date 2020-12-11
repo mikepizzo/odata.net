@@ -438,7 +438,7 @@ namespace Microsoft.OData.Client
         }
 
         /// <summary> Returns the underlying HttpRequestMessage </summary>
-        public HttpRequestMessage HttpRequestMessage
+        internal HttpRequestMessage HttpRequestMessage
         {
             get
             {

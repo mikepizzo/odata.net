@@ -17,6 +17,7 @@ namespace Microsoft.OData.Client
 
     /// <summary> IODataRequestMessage interface implementation. </summary>
     [SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "Returning MemoryStream which doesn't require disposal")]
+    [Obsolete("Migrate from the use of HttpWebRequest to HttpClient")]
     public class HttpWebRequestMessage : DataServiceClientRequestMessage
     {
         #region Private Fields
