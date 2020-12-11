@@ -24,6 +24,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
     using Microsoft.Test.Taupo.Common;
     using Microsoft.Test.Taupo.Contracts;
     using Microsoft.Test.Taupo.Contracts.EntityModel;
+    using ReferenceEqualityComparer = Taupo.Common.ReferenceEqualityComparer;
 
 #if !WINDOWS_PHONE
     /// <summary>

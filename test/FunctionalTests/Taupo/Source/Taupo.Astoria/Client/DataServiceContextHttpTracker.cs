@@ -18,6 +18,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
     using Microsoft.Test.Taupo.Astoria.Contracts.Client;
     using Microsoft.Test.Taupo.Astoria.Contracts.Http;
     using Microsoft.Test.Taupo.Common;
+    using ReferenceEqualityComparer = Taupo.Common.ReferenceEqualityComparer;
 
 #if !WINDOWS_PHONE
     /// <summary>
