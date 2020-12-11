@@ -174,7 +174,8 @@ namespace Microsoft.Test.OData.Tests.Client.AsynchronousTests
         {
             var value = "";
             var context = this.CreateWrappedContext<DefaultContainer>().Context;
-            context.SendingRequest2 += (sender, eventArgs) => ((HttpWebRequestMessage)eventArgs.RequestMessage).SetHeader("Prefer", "odata.include-annotations=*");
+            context.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
+            context.SendingRequest2 += (sender, eventArgs) => ((HttpClientRequestMessage)eventArgs.RequestMessage).SetHeader("Prefer", "odata.include-annotations=*");
             context.Configurations.ResponsePipeline.OnEntryEnded((ReadingEntryArgs) => value = (ReadingEntryArgs.Entry.InstanceAnnotations).FirstOrDefault().Name);
 
             var query = context.Computer.OrderBy(c => c.ComputerId) as DataServiceQuery<Computer>;
@@ -305,7 +306,7 @@ namespace Microsoft.Test.OData.Tests.Client.AsynchronousTests
             ServicePoint servicePoint = null;
             context.SendingRequest2 += ((sender, args) =>
             {
-                if (args.RequestMessage is HttpWebRequestMessage)
+                if (args.RequestMessage is HttpClientRequestMessage)
                 {
                    
                 }

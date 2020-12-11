@@ -11,11 +11,13 @@ namespace Microsoft.Test.OData.Tests.Client.ODataWCFServiceTests
     using System.Collections.ObjectModel;
     using System.Linq;
     using Microsoft.OData;
+    using Microsoft.OData.Client;
     using Microsoft.OData.Edm;
     using Microsoft.Test.OData.Services.TestServices;
     using Microsoft.Test.OData.Services.TestServices.ODataWCFServiceReference;
     using Microsoft.Test.OData.Tests.Client.Common;
     using Xunit;
+    using HttpWebRequestMessage = Common.HttpWebRequestMessage;
 
     /// <summary>
     /// Send query and verify the results from the service implemented using ODataLib and EDMLib.
@@ -652,8 +654,9 @@ namespace Microsoft.Test.OData.Tests.Client.ODataWCFServiceTests
         public void QueryPropertyValueWhichIsNullFromODataClient()
         {
             TestClientContext.Format.UseJson(Model);
+            TestClientContext.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
 
-            TestClientContext.SendingRequest2 += (sender, eventArgs) => ((Microsoft.OData.Client.HttpWebRequestMessage)eventArgs.RequestMessage).SetHeader("Accept", "text/plain");
+            TestClientContext.SendingRequest2 += (sender, eventArgs) => ((Microsoft.OData.Client.HttpClientRequestMessage)eventArgs.RequestMessage).SetHeader("Accept", "text/plain");
             var middleName = TestClientContext.Execute<string>(new Uri(ServiceBaseUri.AbsoluteUri + "/People(5)/MiddleName/$value"));
             List<string> enumResult = middleName.ToList();
             Assert.Equal(0, enumResult.Count);

@@ -210,9 +210,10 @@ namespace Microsoft.Test.OData.Tests.Client.PipelineEventsTests
             for (int i = 0; i < 1; i++)
             {
                 var context = this.CreateWrappedContext<DefaultContainer>().Context;
+                context.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
                 ///context.UndeclaredPropertyBehavior = UndeclaredPropertyBehavior.Support;
                 string mimeType = MimeTypes.ApplicationJson + MimeTypes.ODataParameterFullMetadata;
-                context.SendingRequest2 += (sender, eventArgs) => ((Microsoft.OData.Client.HttpWebRequestMessage)eventArgs.RequestMessage).SetHeader("Accept", mimeType);
+                context.SendingRequest2 += (sender, eventArgs) => ((Microsoft.OData.Client.HttpClientRequestMessage)eventArgs.RequestMessage).SetHeader("Accept", mimeType);
                 context.Configurations.ResponsePipeline.OnEntryEnded(PipelineEventsTestsHelper.ModifyEntryId_Reading);
 
                 if (i == 1)
