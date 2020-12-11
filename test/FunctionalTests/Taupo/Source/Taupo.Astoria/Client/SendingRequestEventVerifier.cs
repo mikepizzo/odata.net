@@ -229,7 +229,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
                 {
                     if (args.RequestMessage.GetType().Name != "InternalODataRequestMessage")
                     {
-                        var requestMessage = args.RequestMessage as HttpWebRequestMessage;
+                        var requestMessage = args.RequestMessage as HttpClientRequestMessage;
 
                         this.assert.IsNotNull(requestMessage, "RequestMessage should be of type HttpWebRequestMessage");
 

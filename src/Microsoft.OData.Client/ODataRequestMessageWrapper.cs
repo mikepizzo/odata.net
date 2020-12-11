@@ -377,12 +377,12 @@ namespace Microsoft.OData.Client
                 // For now, we don't think this adds a lot of value exposing on the public DataServiceClientRequestMessage class
                 // In future, we can always add it if customers ask for this. Erring on the side of keeping the public
                 // class simple.
-                var httpWebRequestMessage = this.requestMessage as HttpWebRequestMessage;
-                if (httpWebRequestMessage != null)
+                var httpClientRequestMessage = this.requestMessage as HttpClientRequestMessage;
+                if (httpClientRequestMessage != null)
                 {
                     // For now we are saying that anyone who implements the transport layer do not get a chance to fire
                     // SendingRequest yet at all. That does not seem that bad.
-                    httpWebRequestMessage.BeforeSendingRequest2Event();
+                    httpClientRequestMessage.BeforeSendingRequest2Event();
                 }
 
                 try
@@ -391,9 +391,9 @@ namespace Microsoft.OData.Client
                 }
                 finally
                 {
-                    if (httpWebRequestMessage != null)
+                    if (httpClientRequestMessage != null)
                     {
-                        httpWebRequestMessage.AfterSendingRequest2Event();
+                        httpClientRequestMessage.AfterSendingRequest2Event();
                     }
                 }
             }

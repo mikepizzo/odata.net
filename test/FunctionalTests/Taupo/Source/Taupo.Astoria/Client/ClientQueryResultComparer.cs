@@ -161,7 +161,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
                             Uri builtUri = new Uri(dataContext.BaseUri + "/" + uriString);
                             EventHandler<SendingRequest2EventArgs> sendingRequest = delegate(object sender, SendingRequest2EventArgs args)
                             {
-                                HttpRequestMessage request = ((HttpWebRequestMessage)args.RequestMessage).HttpRequestMessage;
+                                HttpRequestMessage request = ((HttpClientRequestMessage)args.RequestMessage).HttpRequestMessage;
                                 this.VerifyActionExecuteHeaders(verb, request.Headers, inputParameters);
                                 this.VerifyCommonExecuteHeaders(request.Headers);
                             };
@@ -217,7 +217,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
 #if !SILVERLIGHT
                             EventHandler<SendingRequest2EventArgs> sendingRequest = delegate(object sender, SendingRequest2EventArgs args)
                             {
-                                HttpRequestMessage request = ((HttpWebRequestMessage)args.RequestMessage).HttpRequestMessage;
+                                HttpRequestMessage request = ((HttpClientRequestMessage)args.RequestMessage).HttpRequestMessage;
                                 this.VerifyActionExecuteHeaders(verb, request.Headers, inputParameters);
                                 this.VerifyCommonExecuteHeaders(request.Headers);
                             };
@@ -333,7 +333,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
 
                             EventHandler<SendingRequest2EventArgs> sendingRequest = delegate(object sender, SendingRequest2EventArgs args)
                             {
-                                HttpRequestMessage request = ((HttpWebRequestMessage)args.RequestMessage).HttpRequestMessage;
+                                HttpRequestMessage request = ((HttpClientRequestMessage)args.RequestMessage).HttpRequestMessage;
                                 this.VerifyCommonExecuteHeaders(request.Headers);
                             };
 

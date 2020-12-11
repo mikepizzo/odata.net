@@ -110,11 +110,12 @@ namespace AstoriaUnitTests.TDD.Tests.Client
         {
             bool previousPostTunnelingValue = ctx.UsePostTunneling;
             ctx.UsePostTunneling = true;
+            ctx.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
             HeaderCollection headersCollection = new HeaderCollection();
             var descriptor = new EntityDescriptor(this.clientEdmModel) { ServerTypeName = this.serverTypeName, Entity = new Customer() };
             var buildingRequestArgs = new BuildingRequestEventArgs("DELETE", new Uri("http://localhost/fakeService.svc/"), headersCollection, descriptor, HttpStack.Auto);
 
-            var requestMessage = (HttpWebRequestMessage)testSubject.CreateRequestMessage(buildingRequestArgs);
+            var requestMessage = (HttpClientRequestMessage)testSubject.CreateRequestMessage(buildingRequestArgs);
 
             requestMessage.GetHeader(XmlConstants.HttpXMethod).Should().Be("DELETE");
             requestMessage.GetHeader(XmlConstants.HttpContentLength).Should().Be("0");
@@ -131,11 +132,12 @@ namespace AstoriaUnitTests.TDD.Tests.Client
         {
             bool previousPostTunnelingValue = ctx.UsePostTunneling;
             ctx.UsePostTunneling = true;
+            ctx.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
             HeaderCollection headersCollection = new HeaderCollection();
             var descriptor = new EntityDescriptor(this.clientEdmModel) { ServerTypeName = this.serverTypeName, Entity = new Customer() };
             var buildingRequestArgs = new BuildingRequestEventArgs("PATCH", new Uri("http://localhost/fakeService.svc/"), headersCollection, descriptor, HttpStack.Auto);
 
-            var requestMessage = (HttpWebRequestMessage)testSubject.CreateRequestMessage(buildingRequestArgs);
+            var requestMessage = (HttpClientRequestMessage)testSubject.CreateRequestMessage(buildingRequestArgs);
 
             requestMessage.GetHeader(XmlConstants.HttpXMethod).Should().Be("PATCH");
             requestMessage.Method.Should().Be("PATCH");
@@ -157,7 +159,7 @@ namespace AstoriaUnitTests.TDD.Tests.Client
             ctx.Configurations.RequestPipeline.OnMessageCreating = (args) =>
             {
                 buildingRequestArgs.Headers.Keys.Should().NotContain(XmlConstants.HttpContentType);
-                return new HttpWebRequestMessage(args);
+                return new HttpClientRequestMessage(args);
             };
 
             testSubject.CreateRequestMessage(buildingRequestArgs);

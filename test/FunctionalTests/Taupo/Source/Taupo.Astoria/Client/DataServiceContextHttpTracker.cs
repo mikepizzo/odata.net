@@ -420,7 +420,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
                 }
             }
 
-            private class TestHttpWebRequestMessage : HttpWebRequestMessage
+            private class TestHttpWebRequestMessage : HttpClientRequestMessage
             {
                 private bool requestHeadersSent;
 

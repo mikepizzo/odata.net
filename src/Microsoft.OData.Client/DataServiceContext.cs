@@ -48,6 +48,22 @@ namespace Microsoft.OData.Client
     }
 
     /// <summary>
+    /// Describes the method that the client will use in making Http requests to the server. 
+    /// </summary>
+    public enum HttpRequestTransportMode
+    {
+        /// <summary>
+        /// The default value. Uses HttpWebRequest
+        /// </summary>
+        HttpWebRequestMessage = 0,
+
+        /// <summary>
+        /// Uses HttpClient.
+        /// </summary>
+        HttpClientRequestMessage = 1,
+    }
+
+    /// <summary>
     /// The <see cref="Microsoft.OData.Client.DataServiceContext" /> represents the runtime context of the data service.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506", Justification = "Central class of the API, likely to have many cross-references")]
@@ -136,6 +152,9 @@ namespace Microsoft.OData.Client
 
         /// <summary>Options that can overwrite ignoreMissingProperties.</summary>
         private UndeclaredPropertyBehavior undeclaredPropertyBehavior = UndeclaredPropertyBehavior.Support;
+
+        /// <summary>The mode to use in making Http requests.</summary>
+        private HttpRequestTransportMode httpRequestTransportMode = HttpRequestTransportMode.HttpWebRequestMessage;
 
         /// <summary>The URL key delimiter to use.</summary>
         private DataServiceUrlKeyDelimiter urlKeyDelimiter;
@@ -677,6 +696,14 @@ namespace Microsoft.OData.Client
         {
             get { return this.undeclaredPropertyBehavior; }
             set { this.undeclaredPropertyBehavior = value; }
+        }
+
+        /// <summary>Gets or sets the HttpRequest mode to use in making Http Requests.</summary>
+        /// <returns>HttpRequestTransportMode.</returns>
+        public HttpRequestTransportMode HttpRequestTransportMode
+        {
+            get { return this.httpRequestTransportMode; }
+            set { this.httpRequestTransportMode = value; }
         }
 
         /// <summary>

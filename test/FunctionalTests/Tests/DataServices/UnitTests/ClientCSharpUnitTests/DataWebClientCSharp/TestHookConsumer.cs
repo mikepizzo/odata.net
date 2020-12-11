@@ -94,7 +94,7 @@ namespace AstoriaUnitTests.Tests
             return wrappedStream;
         }
 
-        private void SendRequest(HttpWebRequestMessage requestMessage)
+        private void SendRequest(HttpClientRequestMessage requestMessage)
         {
             Assert.IsNotNull(requestMessage, "sendRequest test hook was called with null request message");
             Dictionary<string, string> headers = WrapHttpRequestHeaders(requestMessage.HttpRequestMessage.Headers);
@@ -155,13 +155,13 @@ namespace AstoriaUnitTests.Tests
         }
     }
 
-    public class TestHttpWebRequestMessage : HttpWebRequestMessage
+    public class TestHttpWebRequestMessage : HttpClientRequestMessage
     {
         private bool requestHeadersAdded;
 
         public TestHttpWebRequestMessage(
             DataServiceClientRequestMessageArgs args,
-            Action<HttpWebRequestMessage> sendRequest,
+            Action<HttpClientRequestMessage> sendRequest,
             Action<HttpWebResponseMessage> sendResponse,
             Func<Stream, Stream> wrapRequestStream,
             Func<Stream, Stream> wrapResponseStream) : base(args)
@@ -172,7 +172,7 @@ namespace AstoriaUnitTests.Tests
             this.WrapResponseStream = wrapResponseStream;
         }
 
-        private Action<HttpWebRequestMessage> SendRequest { get; set; }
+        private Action<HttpClientRequestMessage> SendRequest { get; set; }
         private Action<HttpWebResponseMessage> SendResponse { get; set; }
         private Func<Stream, Stream> WrapRequestStream { get; set; }
         private Func<Stream, Stream> WrapResponseStream { get; set; }
