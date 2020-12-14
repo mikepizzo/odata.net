@@ -235,7 +235,7 @@ namespace Microsoft.Test.Taupo.Astoria.Client
                         this.assert.IsNotNull(requestMessage, "RequestMessage should be of type HttpWebRequestMessage");
 
                         var httpRequestMessage = requestMessage.HttpRequestMessage as HttpRequestMessage;
-                        this.assert.IsNotNull(httpRequestMessage, "RequestMessage.HttpWebRequest should be of type HttpWebRequest");
+                        this.assert.IsNotNull(httpRequestMessage, "RequestMessage.HttpRequestMessage should be of type HttpRequestMessage");
 
 #if WIN8
                     if (this.expectedContext.Credentials != null)

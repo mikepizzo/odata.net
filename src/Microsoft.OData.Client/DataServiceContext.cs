@@ -53,7 +53,7 @@ namespace Microsoft.OData.Client
     public enum HttpRequestTransportMode
     {
         /// <summary>
-        /// The default value. Uses HttpWebRequest
+        /// Uses HttpWebRequest
         /// </summary>
         HttpWebRequestMessage = 0,
 
@@ -153,7 +153,7 @@ namespace Microsoft.OData.Client
         /// <summary>Options that can overwrite ignoreMissingProperties.</summary>
         private UndeclaredPropertyBehavior undeclaredPropertyBehavior = UndeclaredPropertyBehavior.Support;
 
-        /// <summary>The mode to use in making Http requests.</summary>
+        /// <summary>The mode to use in making Http requests. Uses HttpWebRequest as the default. </summary>
         private HttpRequestTransportMode httpRequestTransportMode = HttpRequestTransportMode.HttpWebRequestMessage;
 
         /// <summary>The URL key delimiter to use.</summary>
