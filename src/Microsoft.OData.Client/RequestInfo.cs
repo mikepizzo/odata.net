@@ -469,14 +469,7 @@ namespace Microsoft.OData.Client
             }
             else
             {
-                if (this.Context.HttpRequestTransportMode == HttpRequestTransportMode.HttpWebRequestMessage)
-                {
-                    clientRequestMessage = new HttpWebRequestMessage(clientRequestMessageArgs);
-                }
-                else 
-                {
-                    clientRequestMessage = new HttpClientRequestMessage(clientRequestMessageArgs);
-                }           
+                clientRequestMessage = this.Context.RequestMessageFactory.CreateRequestMessage(clientRequestMessageArgs, this.Context);       
             }
             return clientRequestMessage;
         }

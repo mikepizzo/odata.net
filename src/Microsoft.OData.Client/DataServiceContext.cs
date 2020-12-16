@@ -55,12 +55,12 @@ namespace Microsoft.OData.Client
         /// <summary>
         /// Uses HttpWebRequest
         /// </summary>
-        HttpWebRequestMessage = 0,
+        HttpWebRequest = 0,
 
         /// <summary>
         /// Uses HttpClient.
         /// </summary>
-        HttpClientRequestMessage = 1,
+        HttpClient = 1,
     }
 
     /// <summary>
@@ -154,7 +154,7 @@ namespace Microsoft.OData.Client
         private UndeclaredPropertyBehavior undeclaredPropertyBehavior = UndeclaredPropertyBehavior.Support;
 
         /// <summary>The mode to use in making Http requests. Uses HttpWebRequest as the default. </summary>
-        private HttpRequestTransportMode httpRequestTransportMode = HttpRequestTransportMode.HttpWebRequestMessage;
+        private HttpRequestTransportMode httpRequestTransportMode = HttpRequestTransportMode.HttpWebRequest;
 
         /// <summary>The URL key delimiter to use.</summary>
         private DataServiceUrlKeyDelimiter urlKeyDelimiter;
@@ -164,6 +164,9 @@ namespace Microsoft.OData.Client
 
         /// <summary>Whether a Where clause that compares only the key property, will generate a $filter query option.</summary>
         private bool keyComparisonGeneratesFilterQuery;
+
+        /// <summary>A factory class to use in selecting the the request message transport mode implementation </summary>
+        private IDataServiceRequestMessageFactory requestMessageFactory = new DataServiceRequestMessageFactory();
 
         #region Test hooks for header and payload verification
 
@@ -703,7 +706,17 @@ namespace Microsoft.OData.Client
         public HttpRequestTransportMode HttpRequestTransportMode
         {
             get { return this.httpRequestTransportMode; }
-            set { this.httpRequestTransportMode = value; }
+            set { 
+                this.httpRequestTransportMode = value; 
+            }
+        }
+
+        /// <summary>Gets or sets the HttpRequest mode to use in making Http Requests.</summary>
+        /// <returns>TransportModeFactory.</returns>
+        internal IDataServiceRequestMessageFactory RequestMessageFactory
+        {
+            get { return this.requestMessageFactory; }
+            set { this.requestMessageFactory = value; }
         }
 
         /// <summary>

@@ -78,13 +78,12 @@ namespace Microsoft.Test.OData.Tests.Client.CustomInstanceAnnotationsTests
         public void RequestWithSinglePreferHeaderAll()
         {
             var context = this.CreateWrappedContext<DefaultContainer>();
-            context.Context.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
             var entityMaterialised = false;
             var feedMaterialised = false;
             context.Format.UseJson();
             context.SendingRequest2 += delegate (Object sender, SendingRequest2EventArgs eventArgs)
             {
-                ((HttpClientRequestMessage)eventArgs.RequestMessage).SetHeader("Prefer", "odata.include-annotations=\"*\"");
+                ((HttpWebRequestMessage)eventArgs.RequestMessage).SetHeader("Prefer", "odata.include-annotations=\"*\"");
             };
 
             context.Configurations.ResponsePipeline
@@ -112,12 +111,11 @@ namespace Microsoft.Test.OData.Tests.Client.CustomInstanceAnnotationsTests
         {
             var context = this.CreateWrappedContext<DefaultContainer>();
             context.Format.UseJson();
-            context.Context.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
             var entityMaterialised = false;
             var feedMaterialised = false;
             context.SendingRequest2 += delegate (Object sender, SendingRequest2EventArgs eventArgs)
             {
-                ((HttpClientRequestMessage)eventArgs.RequestMessage).SetHeader("Prefer", "odata.include-annotations=AnnotationOnFeed.AddedBeforeWriteStart.index.0");
+                ((HttpWebRequestMessage)eventArgs.RequestMessage).SetHeader("Prefer", "odata.include-annotations=AnnotationOnFeed.AddedBeforeWriteStart.index.0");
             };
             context.Configurations.ResponsePipeline
                 .OnEntityMaterialized((args) =>
@@ -143,14 +141,13 @@ namespace Microsoft.Test.OData.Tests.Client.CustomInstanceAnnotationsTests
         public void RequestWithMultipleCompatiblePreferHeaderParts()
         {
             var context = this.CreateWrappedContext<DefaultContainer>();
-            context.Context.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
             context.Format.UseJson();
             var entityMaterialised = false;
             var feedMaterialised = false;
             context.SendingRequest2 += delegate (Object sender, SendingRequest2EventArgs eventArgs)
             {
-                ((HttpClientRequestMessage)eventArgs.RequestMessage).PreferHeader().AnnotationFilter = "AnnotationOnFeed.AddedBeforeWriteStart.index.0";
-                ((HttpClientRequestMessage)eventArgs.RequestMessage).PreferHeader().ReturnContent = true;
+                ((HttpWebRequestMessage)eventArgs.RequestMessage).PreferHeader().AnnotationFilter = "AnnotationOnFeed.AddedBeforeWriteStart.index.0";
+                ((HttpWebRequestMessage)eventArgs.RequestMessage).PreferHeader().ReturnContent = true;
             };
             context.Configurations.ResponsePipeline
                 .OnEntityMaterialized((args) =>
@@ -176,13 +173,12 @@ namespace Microsoft.Test.OData.Tests.Client.CustomInstanceAnnotationsTests
         public void RequestWithMultipleIncompatiblePreferHeaders()
         {
             var context = this.CreateWrappedContext<DefaultContainer>();
-            context.Context.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
             context.Format.UseJson();
 
             context.SendingRequest2 += delegate (Object sender, SendingRequest2EventArgs eventArgs)
             {
-                ((HttpClientRequestMessage)eventArgs.RequestMessage).PreferHeader().AnnotationFilter = "AnnotationOnFeed.AddedBeforeWriteStart.index.0";
-                ((HttpClientRequestMessage)eventArgs.RequestMessage).PreferHeader().ReturnContent = false;
+                ((HttpWebRequestMessage)eventArgs.RequestMessage).PreferHeader().AnnotationFilter = "AnnotationOnFeed.AddedBeforeWriteStart.index.0";
+                ((HttpWebRequestMessage)eventArgs.RequestMessage).PreferHeader().ReturnContent = false;
             };
             context.Configurations.ResponsePipeline.OnEntityMaterialized((args) =>
             {
@@ -198,13 +194,12 @@ namespace Microsoft.Test.OData.Tests.Client.CustomInstanceAnnotationsTests
         public void RequestWithMultipleIncludeAnnotationsHeaders()
         {
             var context = this.CreateWrappedContext<DefaultContainer>();
-            context.Context.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
             context.Format.UseJson();
             var entityMaterialised = false;
             var feedMaterialised = false;
             context.SendingRequest2 += delegate (Object sender, SendingRequest2EventArgs eventArgs)
             {
-                ((HttpClientRequestMessage)eventArgs.RequestMessage).SetHeader("Prefer", "odata.include-annotations=-AnnotationOnFeed.AddedBeforeWriteStart.*; odata.include-annotations=*");
+                ((HttpWebRequestMessage)eventArgs.RequestMessage).SetHeader("Prefer", "odata.include-annotations=-AnnotationOnFeed.AddedBeforeWriteStart.*; odata.include-annotations=*");
 
             };
             context.Configurations.ResponsePipeline
@@ -230,13 +225,12 @@ namespace Microsoft.Test.OData.Tests.Client.CustomInstanceAnnotationsTests
         public void RequestWithMultipleIncludeAnnotationsHeadersInvertHeaders()
         {
             var context = this.CreateWrappedContext<DefaultContainer>();
-            context.Context.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
             context.Format.UseJson();
             var entityMaterialised = false;
             var feedMaterialised = false;
             context.SendingRequest2 += delegate (Object sender, SendingRequest2EventArgs eventArgs)
             {
-                ((HttpClientRequestMessage)eventArgs.RequestMessage).SetHeader("Prefer", "odata.include-annotations=\"*,-AnnotationOnFeed.AddedBeforeWriteStart.*\"");
+                ((HttpWebRequestMessage)eventArgs.RequestMessage).SetHeader("Prefer", "odata.include-annotations=\"*,-AnnotationOnFeed.AddedBeforeWriteStart.*\"");
 
             };
             context.Configurations.ResponsePipeline.OnEntityMaterialized((args) =>

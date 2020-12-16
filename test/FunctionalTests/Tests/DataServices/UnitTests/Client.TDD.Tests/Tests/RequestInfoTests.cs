@@ -110,7 +110,7 @@ namespace AstoriaUnitTests.TDD.Tests.Client
         {
             bool previousPostTunnelingValue = ctx.UsePostTunneling;
             ctx.UsePostTunneling = true;
-            ctx.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
+            ctx.HttpRequestTransportMode = HttpRequestTransportMode.HttpClient;
             HeaderCollection headersCollection = new HeaderCollection();
             var descriptor = new EntityDescriptor(this.clientEdmModel) { ServerTypeName = this.serverTypeName, Entity = new Customer() };
             var buildingRequestArgs = new BuildingRequestEventArgs("DELETE", new Uri("http://localhost/fakeService.svc/"), headersCollection, descriptor, HttpStack.Auto);
@@ -132,7 +132,7 @@ namespace AstoriaUnitTests.TDD.Tests.Client
         {
             bool previousPostTunnelingValue = ctx.UsePostTunneling;
             ctx.UsePostTunneling = true;
-            ctx.HttpRequestTransportMode = HttpRequestTransportMode.HttpClientRequestMessage;
+            ctx.HttpRequestTransportMode = HttpRequestTransportMode.HttpClient;
             HeaderCollection headersCollection = new HeaderCollection();
             var descriptor = new EntityDescriptor(this.clientEdmModel) { ServerTypeName = this.serverTypeName, Entity = new Customer() };
             var buildingRequestArgs = new BuildingRequestEventArgs("PATCH", new Uri("http://localhost/fakeService.svc/"), headersCollection, descriptor, HttpStack.Auto);
@@ -159,7 +159,7 @@ namespace AstoriaUnitTests.TDD.Tests.Client
             ctx.Configurations.RequestPipeline.OnMessageCreating = (args) =>
             {
                 buildingRequestArgs.Headers.Keys.Should().NotContain(XmlConstants.HttpContentType);
-                return new HttpClientRequestMessage(args);
+                return new HttpWebRequestMessage(args);
             };
 
             testSubject.CreateRequestMessage(buildingRequestArgs);

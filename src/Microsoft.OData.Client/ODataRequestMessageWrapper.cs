@@ -377,50 +377,25 @@ namespace Microsoft.OData.Client
                 // For now, we don't think this adds a lot of value exposing on the public DataServiceClientRequestMessage class
                 // In future, we can always add it if customers ask for this. Erring on the side of keeping the public
                 // class simple.
-                if (requestInfo.Context.HttpRequestTransportMode == HttpRequestTransportMode.HttpWebRequestMessage)
+                var httpWebRequestMessage = this.requestMessage as ISendingRequestEventArgsInterface;
+                if (httpWebRequestMessage != null)
                 {
-                    var httpWebRequestMessage = this.requestMessage as HttpWebRequestMessage;
+                    // For now we are saying that anyone who implements the transport layer do not get a chance to fire
+                    // SendingRequest yet at all. That does not seem that bad.
+                    httpWebRequestMessage.BeforeSendingRequest2Event();
+                }
+
+                try
+                {
+                    this.requestInfo.FireSendingRequest2(new SendingRequest2EventArgs(this.requestMessage, descriptor, this.IsBatchPartRequest));
+                }
+                finally
+                {
                     if (httpWebRequestMessage != null)
                     {
-                        // For now we are saying that anyone who implements the transport layer do not get a chance to fire
-                        // SendingRequest yet at all. That does not seem that bad.
-                        httpWebRequestMessage.BeforeSendingRequest2Event();
+                        httpWebRequestMessage.AfterSendingRequest2Event();
                     }
-
-                    try
-                    {
-                        this.requestInfo.FireSendingRequest2(new SendingRequest2EventArgs(this.requestMessage, descriptor, this.IsBatchPartRequest));
-                    }
-                    finally
-                    {
-                        if (httpWebRequestMessage != null)
-                        {
-                            httpWebRequestMessage.AfterSendingRequest2Event();
-                        }
-                    }
-                }
-                else 
-                {
-                    var httpClientRequestMessage = this.requestMessage as HttpClientRequestMessage;
-                    if (httpClientRequestMessage != null)
-                    {
-                        // For now we are saying that anyone who implements the transport layer do not get a chance to fire
-                        // SendingRequest yet at all. That does not seem that bad.
-                        httpClientRequestMessage.BeforeSendingRequest2Event();
-                    }
-
-                    try
-                    {
-                        this.requestInfo.FireSendingRequest2(new SendingRequest2EventArgs(this.requestMessage, descriptor, this.IsBatchPartRequest));
-                    }
-                    finally
-                    {
-                        if (httpClientRequestMessage != null)
-                        {
-                            httpClientRequestMessage.AfterSendingRequest2Event();
-                        }
-                    }
-                }
+                }               
             }
 #if DEBUG
             else
