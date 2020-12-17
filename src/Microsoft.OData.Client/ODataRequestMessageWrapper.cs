@@ -377,7 +377,7 @@ namespace Microsoft.OData.Client
                 // For now, we don't think this adds a lot of value exposing on the public DataServiceClientRequestMessage class
                 // In future, we can always add it if customers ask for this. Erring on the side of keeping the public
                 // class simple.
-                ISendingRequestEventArgs sendingRequestEventArgs = this.requestMessage as ISendingRequestEventArgs;
+                ISendingRequest2 sendingRequestEventArgs = this.requestMessage as ISendingRequest2;
                 if (sendingRequestEventArgs != null)
                 {
                     // For now we are saying that anyone who implements the transport layer do not get a chance to fire
