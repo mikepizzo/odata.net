@@ -18,7 +18,7 @@ namespace Microsoft.OData.Client
     /// <summary> IODataRequestMessage interface implementation. </summary>
     [SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "Returning MemoryStream which doesn't require disposal")]
     [Obsolete("Migrate from the use of HttpWebRequestMessage to HttpClientRequestMessage")]
-    public class HttpWebRequestMessage : DataServiceClientRequestMessage, ISendingRequestEventArgsInterface
+    public class HttpWebRequestMessage : DataServiceClientRequestMessage, ISendingRequestEventArgs
     {
         #region Private Fields
         /// <summary>Request Url.</summary>
@@ -416,7 +416,7 @@ namespace Microsoft.OData.Client
         /// <summary>
         /// This method is called just before firing SendingRequest2 event.
         /// </summary>
-        void ISendingRequestEventArgsInterface.BeforeSendingRequest2Event()
+        void ISendingRequestEventArgs.BeforeSendingRequest2Event()
         {
             this.inSendingRequest2Event = true;
         }
@@ -424,7 +424,7 @@ namespace Microsoft.OData.Client
         /// <summary>
         /// This method is called immd. after SendingRequest2 event has been fired.
         /// </summary>
-        void ISendingRequestEventArgsInterface.AfterSendingRequest2Event()
+        void ISendingRequestEventArgs.AfterSendingRequest2Event()
         {
             this.inSendingRequest2Event = false;
 #if DEBUG

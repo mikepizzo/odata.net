@@ -706,9 +706,7 @@ namespace Microsoft.OData.Client
         public HttpRequestTransportMode HttpRequestTransportMode
         {
             get { return this.httpRequestTransportMode; }
-            set { 
-                this.httpRequestTransportMode = value; 
-            }
+            set { this.httpRequestTransportMode = value; }
         }
 
         /// <summary>Gets or sets the HttpRequest mode to use in making Http Requests.</summary>

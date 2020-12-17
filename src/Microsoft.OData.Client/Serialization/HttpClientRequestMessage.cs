@@ -20,7 +20,7 @@ namespace Microsoft.OData.Client
     /// <summary>
     /// HttpClient based implementation of DataServiceClientRequestMessage.
     /// </summary>
-    public class HttpClientRequestMessage : DataServiceClientRequestMessage, ISendingRequestEventArgsInterface, IDisposable
+    public class HttpClientRequestMessage : DataServiceClientRequestMessage, ISendingRequestEventArgs, IDisposable
     {
         /// <summary>
         /// HttpClient distinguishes "Content" headers from "Request" headers, so we
@@ -527,12 +527,12 @@ namespace Microsoft.OData.Client
             }
         }
 
-        void ISendingRequestEventArgsInterface.BeforeSendingRequest2Event()
+        void ISendingRequestEventArgs.BeforeSendingRequest2Event()
         {
             this.inSendingRequest2Event = true;
         }
 
-        void ISendingRequestEventArgsInterface.AfterSendingRequest2Event()
+        void ISendingRequestEventArgs.AfterSendingRequest2Event()
         {
             this.inSendingRequest2Event = false;
 #if DEBUG
