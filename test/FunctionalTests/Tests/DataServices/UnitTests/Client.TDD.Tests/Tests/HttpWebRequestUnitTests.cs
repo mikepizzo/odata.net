@@ -38,15 +38,17 @@ namespace AstoriaUnitTests.TDD.Tests.Client
             IDictionary<string, string> Headers = new Dictionary<string, string>();
             DataServiceClientRequestMessageArgs args = new DataServiceClientRequestMessageArgs(request.Method.ToString(), request.RequestUri, true, false, Headers);
             new HttpClientRequestMessage(args).SetHeader(XmlConstants.HttpUserAgent, "MyUserAgent");
+            new HttpWebRequestMessage(args).SetHeader(XmlConstants.HttpUserAgent, "MyUserAgent");
         }
 
-       [Fact]
+        [Fact]
         public void SetAcceptCharsetShouldNotBeSetOnSilverlightAndSetOnOtherPlatforms()
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "http://www.svc");
             IDictionary<string, string> Headers = new Dictionary<string, string>();
             DataServiceClientRequestMessageArgs args = new DataServiceClientRequestMessageArgs(request.Method.ToString(), request.RequestUri, true, false, Headers);
             new HttpClientRequestMessage(args).SetHeader(XmlConstants.HttpAcceptCharset, "utf8");
+            new HttpWebRequestMessage(args).SetHeader(XmlConstants.HttpAcceptCharset, "utf8");
         }
 
         [Fact]
@@ -56,6 +58,7 @@ namespace AstoriaUnitTests.TDD.Tests.Client
             IDictionary<string, string> Headers = new Dictionary<string, string>();
             DataServiceClientRequestMessageArgs args = new DataServiceClientRequestMessageArgs(request.Method.ToString(), request.RequestUri, true, false, Headers);
             new HttpClientRequestMessage(args).SetHeader(XmlConstants.HttpContentLength, 1.ToString(CultureInfo.InvariantCulture.NumberFormat));
+            new HttpWebRequestMessage(args).SetHeader(XmlConstants.HttpContentLength, 1.ToString(CultureInfo.InvariantCulture.NumberFormat));
         }
     }
 }

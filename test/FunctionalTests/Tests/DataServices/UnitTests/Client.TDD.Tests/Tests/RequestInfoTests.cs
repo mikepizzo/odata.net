@@ -105,43 +105,64 @@ namespace AstoriaUnitTests.TDD.Tests.Client
             testSubject.InferServerTypeNameFromServerModel(this.entityDescriptor).Should().Be(null);
         }
 
-        [Fact]
-        public void RequestInfoShouldCreateTunneledDeleteRequestMessageDeleteMethodAndDeleteInHttpXMethodHeader()
+        [InlineData(HttpRequestTransportMode.HttpClient)]
+        [InlineData(HttpRequestTransportMode.HttpWebRequest)]
+        [Theory]
+        public void RequestInfoShouldCreateTunneledDeleteRequestMessageDeleteMethodAndDeleteInHttpXMethodHeader(HttpRequestTransportMode requestTransportMode)
         {
             bool previousPostTunnelingValue = ctx.UsePostTunneling;
             ctx.UsePostTunneling = true;
-            ctx.HttpRequestTransportMode = HttpRequestTransportMode.HttpClient;
+            ctx.HttpRequestTransportMode = requestTransportMode;
             HeaderCollection headersCollection = new HeaderCollection();
             var descriptor = new EntityDescriptor(this.clientEdmModel) { ServerTypeName = this.serverTypeName, Entity = new Customer() };
             var buildingRequestArgs = new BuildingRequestEventArgs("DELETE", new Uri("http://localhost/fakeService.svc/"), headersCollection, descriptor, HttpStack.Auto);
 
-            var requestMessage = (HttpClientRequestMessage)testSubject.CreateRequestMessage(buildingRequestArgs);
+            var requestMessage = testSubject.CreateRequestMessage(buildingRequestArgs);
 
             requestMessage.GetHeader(XmlConstants.HttpXMethod).Should().Be("DELETE");
             requestMessage.GetHeader(XmlConstants.HttpContentLength).Should().Be("0");
             requestMessage.GetHeader(XmlConstants.HttpContentType).Should().BeEmpty();
             requestMessage.Method.Should().Be("DELETE");
-            requestMessage.HttpRequestMessage.Method.Should().Be(HttpMethod.Post);
-            
+
+            if (requestTransportMode == HttpRequestTransportMode.HttpClient)
+            {
+                ((HttpClientRequestMessage)requestMessage).HttpRequestMessage.Method.Should().Be(HttpMethod.Post);
+
+            }
+            else
+            {
+                ((HttpWebRequestMessage)requestMessage).HttpWebRequest.Method.Should().Be("POST");
+            }
+        
             // undoing change so this is applicable only for this test.
             ctx.UsePostTunneling = previousPostTunnelingValue;
         }
 
-        [Fact]
-        public void RequestInfoShouldCreateTunneledPatchRequestMessagePostMethodAndPatchInHttpXMethodHeader()
+        [InlineData(HttpRequestTransportMode.HttpClient)]
+        [InlineData(HttpRequestTransportMode.HttpWebRequest)]
+        [Theory]
+        public void RequestInfoShouldCreateTunneledPatchRequestMessagePostMethodAndPatchInHttpXMethodHeader(HttpRequestTransportMode requestTransportMode)
         {
             bool previousPostTunnelingValue = ctx.UsePostTunneling;
             ctx.UsePostTunneling = true;
-            ctx.HttpRequestTransportMode = HttpRequestTransportMode.HttpClient;
+            ctx.HttpRequestTransportMode = requestTransportMode;
             HeaderCollection headersCollection = new HeaderCollection();
             var descriptor = new EntityDescriptor(this.clientEdmModel) { ServerTypeName = this.serverTypeName, Entity = new Customer() };
             var buildingRequestArgs = new BuildingRequestEventArgs("PATCH", new Uri("http://localhost/fakeService.svc/"), headersCollection, descriptor, HttpStack.Auto);
 
-            var requestMessage = (HttpClientRequestMessage)testSubject.CreateRequestMessage(buildingRequestArgs);
+            var requestMessage = testSubject.CreateRequestMessage(buildingRequestArgs);
 
             requestMessage.GetHeader(XmlConstants.HttpXMethod).Should().Be("PATCH");
             requestMessage.Method.Should().Be("PATCH");
-            requestMessage.HttpRequestMessage.Method.Should().Be(HttpMethod.Post);
+            if (requestTransportMode == HttpRequestTransportMode.HttpClient)
+            {
+                ((HttpClientRequestMessage)requestMessage).HttpRequestMessage.Method.Should().Be(HttpMethod.Post);
+
+            }
+            else
+            {
+                ((HttpWebRequestMessage)requestMessage).HttpWebRequest.Method.Should().Be("POST");
+            }
 
             // undoing change so this is applicable only for this test.
             ctx.UsePostTunneling = previousPostTunnelingValue;
